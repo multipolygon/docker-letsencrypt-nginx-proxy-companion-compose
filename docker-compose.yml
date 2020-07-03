@@ -1,5 +1,10 @@
 version: '2'
 
+networks:
+  www:
+    external:
+      name: www
+
 services:
   proxy:
     image: nginx
@@ -10,11 +15,11 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./conf.d:/etc/nginx/conf.d
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-      - ./certs:/etc/nginx/certs
-      - ./htpasswd:/etc/nginx/htpasswd
+      - ./conf.d:/etc/nginx/conf.d:delegated
+      - ./vhost.d:/etc/nginx/vhost.d:ro
+      - ./html:/usr/share/nginx/html:ro
+      - ./certs:/etc/nginx/certs:ro
+      - ./htpasswd:/etc/nginx/htpasswd:ro
     restart: always
 
   gen:
@@ -31,24 +36,3 @@ services:
     restart: always
     depends_on:
       - proxy
-
-  ssl:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: nginx_ssl
-    networks:
-      - www
-    environment:
-      - NGINX_DOCKER_GEN_CONTAINER=nginx_gen
-    volumes_from:
-      - proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    restart: always
-    depends_on:
-      - gen
-    
-networks:
-  www:
-    external:
-      name: www
-
