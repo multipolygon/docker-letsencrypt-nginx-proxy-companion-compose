@@ -12,6 +12,6 @@ rm $HOST.pass.key
 
 openssl req -new -key $HOST.key -out $HOST.csr
 
-openssl x509 -req -sha256 -days 365 -in $HOST.csr -signkey $HOST.key -out $HOST.crt
+openssl x509 -req -sha256 -days 3650 -in $HOST.csr -signkey $HOST.key -out $HOST.crt
 
 echo "Please restart Docker container"

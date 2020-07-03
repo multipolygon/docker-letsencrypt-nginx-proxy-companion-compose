@@ -16,19 +16,27 @@ Create a www network:
 
     docker network create www
 
-## Self-Signed Certificates (development)
+## Self-Signed Certificates
+
+For CloudFlare proxy etc:
 
     HOST=example.com ./generate-self-signed-cert.sh
+    
+Note, HOST can be the TLD if using multiple subdomains.
+
+For development, this will cover all *.local domains:
+
+    HOST=local ./generate-self-signed-cert.sh
 
 ## Run It
 
-### Development
+### Development or CloudFlare Proxy
 
 With self-signed certificates (in `cert` directory):
 
     docker-compose up -d
 
-### Production
+### LetsEncrypt
 
 With automatically generated LetsEncrypt certificates:
 
